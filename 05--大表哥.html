@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>大表哥</title>
+	<link rel="stylesheet" href="table.css">
+</head>
+<body>
+	<div id="list"></div>
+	<script>
+		var rdata = [{
+			name: 'tom',
+			age: 18,
+			count: 100, // 在网站充值的 金币数量 100币 = 100 rmb
+			gender: '男',
+			address: '北京'
+		}, {
+			name: 'jim',
+			age: 22,
+			count: 0,
+			gender: '女',
+			address: '上海'
+		}, {
+			name: 'hanmei',
+			age: 20,
+			count: 100000,
+			gender: '男',
+			address: '天津'
+		}];
+
+		// 1：创建构造函数
+		function Table(config) {
+			// 2: 过滤无效值
+			if(!config && !config.target && !config.data && !config.model){
+				return this;
+			}
+			// 3: 将用户的配置信息放到 当前对象上 this
+			this.tClass = config.tClass || 'grid-table';
+			this.target = config.target;
+			this.data = config.data;
+			this.model = config.model;
+
+			// 4: 创建一个table标签
+			this.table = document.createElement('table');
+			// 指定表哥的样式
+			this.table.className = this.tClass;
+
+		}
+
+		Table.prototype = {
+			constructor: Table,
+			renderHeader: function() {
+				var head = document.createElement('thead'),// 创建表哥头
+						tr = document.createElement('tr'), // 对应表哥头的行
+						th; // 表哥的每一列
+
+				for(var i = 0, l = this.model.length; i < l; i++){
+					// 创建th
+					th = document.createElement('th');
+					// 指定th的内容
+					th.innerHTML = this.model[i].title;
+					// 如果指定了th的宽，那么就设置其宽度
+					if(this.model[i].width){
+						th.width = this.model[i].width + 'px';
+					}
+					// 如果指定了th 的对齐方式，
+					if(this.model[i].align){
+						th.align = this.model[i].align;
+					}
+					// 将当前创建的th，追加到tr上
+					tr.appendChild(th);
+				}
+				// 将tr追加到thead
+				head.appendChild(tr);
+				// 将head添加到table
+				this.table.appendChild(head);
+			},
+			renderBody: function() {},
+			draw: function() {
+				this.renderHeader();
+				document.querySelector(this.target).appendChild(this.table);
+			}
+		};
+
+		var t = new Table({
+			tClass: 'grid-table', // 表哥的样式
+			target: '#list', // 表哥的父节点
+			data: rdata, // 要绘制的数据
+			model: [{
+				title: '姓名', // 指定表头显示的文本内容
+				align: 'center', // 列的对齐方式
+				width: 60, // 指定列的宽度
+				prop: 'name' // 指定渲染数据对象的属性名称
+			}, {
+				title: '年龄', // 指定表头显示的文本内容
+				align: 'center', // 列的对齐方式
+				width: 100, // 指定列的宽度
+				prop: 'age' // 指定渲染数据对象的属性名称
+			}, {
+				title: '性别', // 指定表头显示的文本内容
+				align: 'center', // 列的对齐方式
+				width: 80, // 指定列的宽度
+				prop: 'gender' // 指定渲染数据对象的属性名称
+			}, {
+				title: '金币数', // 指定表头显示的文本内容
+				align: 'center', // 列的对齐方式
+				width: 150, // 指定列的宽度
+				prop: 'count' // 指定渲染数据对象的属性名称
+			}, {
+				title: '住址', // 指定表头显示的文本内容
+				align: 'center', // 列的对齐方式
+				width: 200, // 指定列的宽度
+				prop: 'address' // 指定渲染数据对象的属性名称
+			}]
+		});
+		t.draw();
+	</script>
+</body>
+</html>
